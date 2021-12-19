@@ -71,6 +71,11 @@ public class ChessBoard {
         return board;
     }
 
+    // ONLY USE FOR TESTS
+    public void setBoard(Piece[][] board) {
+        this.board = board;
+    }
+
     public boolean currentPlayerInCheck() {
         return true;
     }
