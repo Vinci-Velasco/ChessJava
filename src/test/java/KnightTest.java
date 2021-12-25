@@ -12,10 +12,10 @@ public class KnightTest {
     private ChessBoard chessBoard = new ChessBoard();
 
     @Test
-    void generateMovesTest() {
+    public void generateMovesTest() {
         Piece[][] board = chessBoard.getBoard();
 
-        // from starting position (generates 2 possible moves
+        // from starting position (generates 2 possible moves)
         Piece knight = board[7][1];
         List<Coordinate> possibleMoves = knight.generateMoves(chessBoard);
         assertEquals(2, possibleMoves.size());
@@ -45,14 +45,16 @@ public class KnightTest {
 
 
         // when all spaces are open (4 should be generated)
+        chessBoard.clearBoard();
         board[3][4] = new Knight(new Coordinate(3, 4), true);
         chessBoard.setBoard(board);
+        knight = board[3][4];
         possibleMoves = knight.generateMoves(chessBoard);
         assertEquals(4, possibleMoves.size());
-        coordinate1.setCoordinates(2, 3);
-        coordinate2.setCoordinates(2, 5);
-        Coordinate coordinate3 = new Coordinate(4, 3);
-        Coordinate coordinate4 = new Coordinate(4, 5);
+        coordinate1.setCoordinates(1, 3);
+        coordinate2.setCoordinates(1, 5);
+        Coordinate coordinate3 = new Coordinate(5, 5);
+        Coordinate coordinate4 = new Coordinate(5, 3);
         assertTrue(possibleMoves.get(0).equals(coordinate1));
         assertTrue(possibleMoves.get(1).equals(coordinate2));
         assertTrue(possibleMoves.get(2).equals(coordinate3));
