@@ -50,10 +50,6 @@ public class Knight extends Piece{
             possibleMoves.add(newCoordinate4);
         }
 
-        for (Coordinate coordinate: possibleMoves) {
-            System.out.println(coordinate.y + ", " + coordinate.x);
-        }
-
         return possibleMoves;
     }
 

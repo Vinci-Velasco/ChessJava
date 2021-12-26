@@ -48,8 +48,8 @@ public class ChessBoard {
         board[7][0] = new Rook(new Coordinate(7, 0), true);
         board[7][1] = new Knight(new Coordinate(7, 1), true);
         board[7][2] = new Bishop(new Coordinate(7, 2), true);
-        board[7][3] = new King(new Coordinate(7, 3), true);
-        board[7][4] = new Queen(new Coordinate(7, 4), true);
+        board[7][3] = new Queen(new Coordinate(7, 3), true);
+        board[7][4] = new King(new Coordinate(7, 4), true);
         board[7][5] = new Bishop(new Coordinate(7, 5), true);
         board[7][6] = new Knight(new Coordinate(7, 6), true);
         board[7][7] = new Rook(new Coordinate(7, 7), true);
