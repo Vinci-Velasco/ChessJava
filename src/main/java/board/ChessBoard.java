@@ -27,8 +27,8 @@ public class ChessBoard {
         board[0][0] = new Rook(new Coordinate(0, 0), false);
         board[0][1] = new Knight(new Coordinate(0, 1), false);
         board[0][2] = new Bishop(new Coordinate(0, 2), false);
-        board[0][3] = new King(new Coordinate(0, 3), false);
-        board[0][4] = new Queen(new Coordinate(0, 4), false);
+        board[0][3] = new Queen(new Coordinate(0, 3), false);
+        board[0][4] = new King(new Coordinate(0, 4), false);
         board[0][5] = new Bishop(new Coordinate(0, 5), false);
         board[0][6] = new Knight(new Coordinate(0, 6), false);
         board[0][7] = new Rook(new Coordinate(0, 7), false);
