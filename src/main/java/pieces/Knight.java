@@ -70,24 +70,21 @@ public class Knight extends Piece{
      * @return if the move is valid
      */
     private boolean validateMove(int newY, int newX, ChessBoard board) {
-        boolean fitsVertically = newY <= board.UP_BOUNDARY && newY >= board.DOWN_BOUNDARY;
+        boolean fitsVertically = newY >= board.UP_BOUNDARY && newY <= board.DOWN_BOUNDARY;
         boolean fitsHorizontally = newX <= board.RIGHT_BOUNDARY && newX >= board.LEFT_BOUNDARY;
 
         if (!(fitsVertically && fitsHorizontally)) {
             return false;
         }
 
-        boolean notFriendly; // either empty space or enemy piece if true
+        boolean squareIsOpen = board.getBoard()[newY][newX] == null;
+        if (squareIsOpen) {
+            return true;
 
-        Piece piece = board.getBoard()[newY][newX];
-
-        if (piece == null) {
-            notFriendly = true;
         } else {
-            notFriendly = piece.getIsWhite() != isWhite;
+            Piece piece = board.getBoard()[newY][newX];
+            boolean isEnemyPiece = piece.getIsWhite() != isWhite;
+            return isEnemyPiece;
         }
-
-        // move should be ok if empty space or on enemy piece
-        return notFriendly;
     }
 }

@@ -10,8 +10,8 @@ import pieces.*;
 public class ChessBoard {
     public final int LEFT_BOUNDARY = 0;
     public final int RIGHT_BOUNDARY = 7;
-    public final int UP_BOUNDARY = 7;
-    public final int DOWN_BOUNDARY = 0;
+    public final int UP_BOUNDARY = 0;
+    public final int DOWN_BOUNDARY = 7;
 
     private Piece[][] board;
     private boolean isCurrentPlayerWhite;
@@ -78,11 +78,11 @@ public class ChessBoard {
 
     // ONLY USE FOR TESTS
     public void clearBoard() {
-        for (int i = 0; i <= UP_BOUNDARY; i++) {
-            for (int j = 0; j <= RIGHT_BOUNDARY; j++) {
-                board[i][j] = null;
-            }
-        }
+         for (int i = 0; i <= DOWN_BOUNDARY; i++) {
+             for (int j = 0; j <= RIGHT_BOUNDARY; j++) {
+                 board[i][j] = null;
+             }
+         }
     }
 
     public boolean currentPlayerInCheck() {

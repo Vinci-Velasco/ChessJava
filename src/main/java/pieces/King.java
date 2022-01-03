@@ -79,7 +79,7 @@ public class King extends Piece{
      * @return if the move is valid
      */
     private boolean validateMove(int newY, int newX, ChessBoard board) {
-        boolean fitsVertically = newY <= board.UP_BOUNDARY && newY >= board.DOWN_BOUNDARY;
+        boolean fitsVertically = newY >= board.UP_BOUNDARY && newY <= board.DOWN_BOUNDARY;
         boolean fitsHorizontally = newX <= board.RIGHT_BOUNDARY && newX >= board.LEFT_BOUNDARY;
 
         if (!(fitsVertically && fitsHorizontally)) {
