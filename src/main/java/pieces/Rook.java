@@ -94,8 +94,8 @@ public class Rook extends Piece{
 
     /**
      * Helper method that validates if a move from the rook can be done
-     * @param newY the y coordinate the pawn is moving to
-     * @param newX the x coordinate the pawn is moving to
+     * @param newY the y coordinate the rook is moving to
+     * @param newX the x coordinate the rook is moving to
      * @param board the current board position (with all the pieces)
      * @return if the move is valid
      */

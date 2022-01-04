@@ -73,8 +73,8 @@ public class King extends Piece{
 
     /**
      * Helper method that validates if a move from the king can be done
-     * @param newY the y coordinate the knight is moving to
-     * @param newX the x coordinate the knight is moving to
+     * @param newY the y coordinate the king is moving to
+     * @param newX the x coordinate the king is moving to
      * @param board the current board position (with all the pieces)
      * @return if the move is valid
      */
