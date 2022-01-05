@@ -20,9 +20,10 @@ public class PawnTest {
         // front is clear (1 available move)
         Piece pawn = board[6][4];
         List<Coordinate> possibleMoves = pawn.generateMoves(chessBoard);
-        assertEquals(1, possibleMoves.size());
+        assertEquals(2, possibleMoves.size());
 
         Coordinate coordinate1 = new Coordinate(5, 4);
+        Coordinate coordinate2 = new Coordinate(4, 4);
         assertTrue(possibleMoves.get(0).equals(coordinate1));
 
         // enemy piece in front (0 available moves)
@@ -42,23 +43,27 @@ public class PawnTest {
         board[5][5] = new Pawn(new Coordinate(5,4), false);
         chessBoard.setBoard(board);
         possibleMoves = pawn.generateMoves(chessBoard);
-        assertEquals(2, possibleMoves.size());
+        assertEquals(3, possibleMoves.size());
 
         coordinate1.setCoordinates(5,4);
-        Coordinate coordinate2 = new Coordinate(5, 5);
+        coordinate2.setCoordinates(5, 5);
+        Coordinate coordinate3 = new Coordinate(4,4);
         assertTrue(possibleMoves.get(0).equals(coordinate1));
         assertTrue(possibleMoves.get(1).equals(coordinate2));
+        assertTrue(possibleMoves.get(2).equals(coordinate3));
 
         // both diagonals + front square filled with enemy pieces (3 moves)
         board[5][3] = new Pawn(new Coordinate(5,4), false);
         chessBoard.setBoard(board);
         possibleMoves = pawn.generateMoves(chessBoard);
-        assertEquals(3, possibleMoves.size());
+        assertEquals(4, possibleMoves.size());
 
-        Coordinate coordinate3 = new Coordinate(5, 3);
+        coordinate3.setCoordinates(5, 3);
+        Coordinate coordinate4 = new Coordinate(4, 4);
         assertTrue(possibleMoves.get(0).equals(coordinate3));
         assertTrue(possibleMoves.get(1).equals(coordinate1));
         assertTrue(possibleMoves.get(2).equals(coordinate2));
+        assertTrue(possibleMoves.get(3).equals(coordinate4));
 
         // both diagonals + front square filled with friendly pieces (0 moves)
         board[5][3] = new Pawn(new Coordinate(5,3), true);

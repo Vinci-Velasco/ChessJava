@@ -16,6 +16,11 @@ public class Bishop extends Piece{
         this.isWhite = isWhite;
     }
 
+    /**
+     * Generate all possible coordinates the bishop can move to
+     * @param board the current board position (with all the pieces)
+     * @return the possible coordinates
+     */
     @Override
     public List<Coordinate> generateMoves(ChessBoard board) {
         List<Coordinate> possibleMoves = new ArrayList<>();

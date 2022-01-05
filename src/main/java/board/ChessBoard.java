@@ -20,6 +20,36 @@ public class ChessBoard {
      * Initialize the board
      */
     public ChessBoard() {
+        setInitialBoard();
+    }
+
+    public boolean updateBoard(Coordinate moveFrom, Coordinate moveTo) {
+        return true;
+    }
+
+    public boolean checkmate() {
+        return true;
+    }
+
+    public Piece[][] getBoard() {
+        return board;
+    }
+
+    // ONLY USE FOR TESTS
+    public void setBoard(Piece[][] board) {
+        this.board = board;
+    }
+
+    // ONLY USE FOR TESTS
+    public void clearBoard() {
+         for (int i = 0; i <= DOWN_BOUNDARY; i++) {
+             for (int j = 0; j <= RIGHT_BOUNDARY; j++) {
+                 board[i][j] = null;
+             }
+         }
+    }
+
+    public void setInitialBoard() {
         board = new Piece[8][8];
         isCurrentPlayerWhite = true;
 
@@ -57,32 +87,6 @@ public class ChessBoard {
         for (int i = 0; i < 8; i++) {
             board[6][i] = new Pawn(new Coordinate(6, i), true);
         }
-    }
-
-    public boolean updateBoard(Coordinate moveFrom, Coordinate moveTo) {
-        return true;
-    }
-
-    public boolean checkmate() {
-        return true;
-    }
-
-    public Piece[][] getBoard() {
-        return board;
-    }
-
-    // ONLY USE FOR TESTS
-    public void setBoard(Piece[][] board) {
-        this.board = board;
-    }
-
-    // ONLY USE FOR TESTS
-    public void clearBoard() {
-         for (int i = 0; i <= DOWN_BOUNDARY; i++) {
-             for (int j = 0; j <= RIGHT_BOUNDARY; j++) {
-                 board[i][j] = null;
-             }
-         }
     }
 
     public boolean currentPlayerInCheck() {

@@ -24,8 +24,17 @@ public class Pawn extends Piece{
     @Override
     public List<Coordinate> generateMoves(ChessBoard board) {
         List<Coordinate> possibleMoves = new ArrayList<>();
-        int newY = coordinates.y - 1;
 
+        int direction;
+        if (isWhite) {
+            direction = -1;
+        } else {
+            direction = 1;
+        }
+
+        int newY = coordinates.y + direction;
+
+        // front 3 squares
         for (int i = -1; i <= 1; i++) {
             int newX = coordinates.x + i;
 
@@ -33,6 +42,15 @@ public class Pawn extends Piece{
                 Coordinate newCoordinate = new Coordinate(newY, newX);
                 possibleMoves.add(newCoordinate);
             }
+        }
+
+        // square 2 ahead
+        newY = coordinates.y + direction + direction;
+        int newX = coordinates.x;
+
+        if (validateMove(newY, newX, board)) {
+            Coordinate newCoordinate = new Coordinate(newY, newX);
+            possibleMoves.add(newCoordinate);
         }
 
         return possibleMoves;
@@ -53,10 +71,32 @@ public class Pawn extends Piece{
             return false;
         }
 
-        // front square
+        int direction;
+        if (isWhite) {
+            direction = -1;
+        } else {
+            direction = 1;
+        }
+
+        // front square and 2 squares ahead
         boolean squareIsOpen = board.getBoard()[newY][newX] == null;
         if (newX == coordinates.x) {
-            return squareIsOpen;
+
+            if (newY == coordinates.y + direction + direction) {
+                boolean prevSquareIsOpen = board.getBoard()[newY+1][newX] == null;
+
+                boolean onStartingPosition;
+                if (isWhite) {
+                    onStartingPosition = coordinates.y == 6;
+                } else {
+                    onStartingPosition = coordinates.y == 1;
+                }
+
+                return squareIsOpen && prevSquareIsOpen && onStartingPosition;
+
+            } else {
+                return squareIsOpen;
+            }
 
         // diagonal squares
         } else {
