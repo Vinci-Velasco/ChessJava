@@ -83,7 +83,7 @@ public class Pawn extends Piece{
         if (newX == coordinates.x) {
 
             if (newY == coordinates.y + direction + direction) {
-                boolean prevSquareIsOpen = board.getBoard()[newY+1][newX] == null;
+                boolean prevSquareIsOpen = board.getBoard()[newY-direction][newX] == null;
 
                 boolean onStartingPosition;
                 if (isWhite) {

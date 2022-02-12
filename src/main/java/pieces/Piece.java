@@ -23,4 +23,8 @@ public abstract class Piece {
     public boolean getIsWhite() {
         return isWhite;
     }
+
+    public Coordinate getCoordinates() {return  coordinates;}
+
+    public void setCoordinates(Coordinate coordinates) {this.coordinates = coordinates;}
 }

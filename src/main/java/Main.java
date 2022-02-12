@@ -1,5 +1,12 @@
+import menus.GameMenu;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        GameMenu gameMenu = new GameMenu();
+        boolean keepPlaying = gameMenu.startGame();
+
+        while (keepPlaying) {
+            keepPlaying = gameMenu.startGame();
+        }
     }
 }
