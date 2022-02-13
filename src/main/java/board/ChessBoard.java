@@ -19,12 +19,21 @@ public class ChessBoard {
     private Piece[][] board;
     private List<Piece> whitePieces;
     private List<Piece> blackPieces;
+    private List<Piece> enemyPieces;
+    private List<Piece> friendlyPieces;
+
     private boolean isCurrentPlayerWhite;
 
     public ChessBoard() {
         setInitialBoard();
     }
 
+    /**
+     * Updates the board state by moving a piece. Returns true if move is valid, false otherwise
+     * @param moveFrom Coordinate of the piece that is going to be moved
+     * @param moveTo New coordinate piece is being moved to
+     * @return true if move is valid and board updated, false otherwise
+     */
     public boolean updateBoard(Coordinate moveFrom, Coordinate moveTo) {
         // tyring to move a piece not on the board
         boolean verticalOutOfBounds = moveFrom.y < UP_BOUNDARY || moveFrom.y > DOWN_BOUNDARY;
@@ -56,18 +65,9 @@ public class ChessBoard {
         List<Piece> previousWhitePieces = new ArrayList<>(whitePieces);
         List<Piece> previousBlackPieces = new ArrayList<>(blackPieces);
 
+
         // preform the move
-        List<Piece> enemyPieces;
-        List<Piece> friendlyPieces;
-
-        if (isCurrentPlayerWhite) {
-            enemyPieces = blackPieces;
-            friendlyPieces = whitePieces;
-        } else {
-            enemyPieces = whitePieces;
-            friendlyPieces = blackPieces;
-        }
-
+        setFriendlyAndEnemyPieces();
         if (board[moveTo.y][moveTo.x] != null) {
             enemyPieces.remove(board[moveTo.y][moveTo.x]);
         }
@@ -78,7 +78,7 @@ public class ChessBoard {
 
         // see if the player is in check after said move (which is invalid), revert to previous
         // board state
-        if (currentPlayerInCheck(enemyPieces, friendlyPieces)) {
+        if (currentPlayerInCheck()) {
             board = previousBoardState;
             whitePieces = previousWhitePieces;
             blackPieces = previousBlackPieces;
@@ -88,32 +88,6 @@ public class ChessBoard {
 
         isCurrentPlayerWhite = !isCurrentPlayerWhite;
         return true;
-    }
-
-    public boolean checkmate() {
-        return true;
-    }
-
-    public Piece[][] getBoard() {
-        return board;
-    }
-
-    public boolean getIsCurrentPlayerWhite() {
-        return isCurrentPlayerWhite;
-    }
-
-    // ONLY USE FOR TESTS
-    public void setBoard(Piece[][] board) {
-        this.board = board;
-    }
-
-    // ONLY USE FOR TESTS
-    public void clearBoard() {
-         for (int i = 0; i <= DOWN_BOUNDARY; i++) {
-             for (int j = 0; j <= RIGHT_BOUNDARY; j++) {
-                 board[i][j] = null;
-             }
-         }
     }
 
     /**
@@ -163,7 +137,7 @@ public class ChessBoard {
         board[7][7] = new Rook(new Coordinate(7, 7), true);
 
         for (int i = 0; i < 8; i++) {
-             whitePieces.add(board[7][i]);
+            whitePieces.add(board[7][i]);
         }
 
         for (int i = 0; i < 8; i++) {
@@ -172,7 +146,12 @@ public class ChessBoard {
         }
     }
 
-    public boolean currentPlayerInCheck(List<Piece> enemyPieces, List<Piece> friendlyPieces) {
+    /**
+     * Determines if the current player is in check
+     * @return true if current player in check, false otherwise
+     */
+    public boolean currentPlayerInCheck() {
+        setFriendlyAndEnemyPieces();
 
         // there should always be a king. This declaration is just placeholder
         Piece king = new King(new Coordinate(0,0), true);
@@ -199,8 +178,30 @@ public class ChessBoard {
         return false;
     }
 
-    private boolean otherPlayerInCheck() {
-        return true;
+    public boolean checkmate() {
+        return false;
+    }
+
+    public Piece[][] getBoard() {
+        return board;
+    }
+
+    public boolean getIsCurrentPlayerWhite() {
+        return isCurrentPlayerWhite;
+    }
+
+    // ONLY USE FOR TESTS
+    public void setBoard(Piece[][] board) {
+        this.board = board;
+    }
+
+    // ONLY USE FOR TESTS
+    public void clearBoard() {
+         for (int i = 0; i <= DOWN_BOUNDARY; i++) {
+             for (int j = 0; j <= RIGHT_BOUNDARY; j++) {
+                 board[i][j] = null;
+             }
+         }
     }
 
     private Piece[][] cloneCurrentBoard() {
@@ -213,5 +214,17 @@ public class ChessBoard {
         }
 
         return copiedBoard;
+    }
+
+    private void setFriendlyAndEnemyPieces() {
+        if (isCurrentPlayerWhite) {
+            enemyPieces = blackPieces;
+            friendlyPieces = whitePieces;
+
+        } else {
+            enemyPieces = whitePieces;
+            friendlyPieces = blackPieces;
+        }
+
     }
 }

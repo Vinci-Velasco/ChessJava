@@ -8,15 +8,20 @@ import java.util.Scanner;
 
 public class GameMenu {
     ChessBoard chessBoard;
-    Piece[][] board;
 
     public GameMenu() {
         chessBoard = new ChessBoard();
-        board = chessBoard.getBoard();
     }
 
     public boolean startGame() {
-        gameLoop();
+        while (!chessBoard.checkmate()) {
+            gameLoop();
+        }
+
+        // print victory/defeat screen
+
+        // return true to play again, false to quit
+
         return true;
     }
 
@@ -25,13 +30,18 @@ public class GameMenu {
      */
     private void gameLoop() {
         displayBoard();
+
         Scanner scanner = new Scanner(System.in);
-        boolean invalidMove = true;
+        String player = "";
 
         // get input from the user to move piece
-        // repeats until valid move chosen
+        boolean invalidMove = true;
         while (invalidMove) {
-            String player = chessBoard.getIsCurrentPlayerWhite() ? "Player white": "Player black";
+            player = chessBoard.getIsCurrentPlayerWhite() ? "Player white": "Player black";
+
+            if (chessBoard.currentPlayerInCheck()) {
+                System.out.println(player + " is in check!");
+            }
 
             System.out.println(player + "'s turn! Enter y position of piece to move:");
             int yFrom = scanner.nextInt();
@@ -50,6 +60,7 @@ public class GameMenu {
 
             if (!chessBoard.updateBoard(moveFrom, moveTo)) {
                 System.out.println("Invalid move! Please try again");
+                displayBoard();
             } else {
                 invalidMove = false;
             }
@@ -60,6 +71,8 @@ public class GameMenu {
      * Displays the current board state
      */
     private void displayBoard() {
+        Piece[][] board = board = chessBoard.getBoard();
+
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
 
