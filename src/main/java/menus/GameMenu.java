@@ -1,6 +1,7 @@
 package menus;
 
 import board.ChessBoard;
+import misc.ChessNotation;
 import misc.Coordinate;
 import pieces.Piece;
 
@@ -8,9 +9,11 @@ import java.util.Scanner;
 
 public class GameMenu {
     ChessBoard chessBoard;
+    ChessNotation chessNotation;
 
     public GameMenu() {
         chessBoard = new ChessBoard();
+        chessNotation = new ChessNotation();
     }
 
     public boolean startGame() {
@@ -43,22 +46,16 @@ public class GameMenu {
                 System.out.println(player + " is in check!");
             }
 
-            System.out.println(player + "'s turn! Enter y position of piece to move:");
-            int yFrom = scanner.nextInt();
+            System.out.println(player + "'s turn! Enter square to move:");
+            String moveFrom = scanner.next();
 
-            System.out.println("Enter x position of piece to move:");
-            int xFrom = scanner.nextInt();
-            Coordinate moveFrom = new Coordinate(yFrom, xFrom);
+            System.out.println("Enter square to move to:");
+            String moveTo = scanner.next();
 
-            System.out.println("Enter y position you want to move to:");
-            int yTo = scanner.nextInt();
+            Coordinate moveFromAsCoordinate = chessNotation.convertToCoordinate(moveFrom);
+            Coordinate moveToAsCoordinate = chessNotation.convertToCoordinate(moveTo);
 
-            System.out.println("Enter x position you want to move to:");
-            int xTo = scanner.nextInt();
-
-            Coordinate moveTo = new Coordinate(yTo, xTo);
-
-            if (!chessBoard.updateBoard(moveFrom, moveTo)) {
+            if (!chessBoard.updateBoard(moveFromAsCoordinate, moveToAsCoordinate)) {
                 System.out.println("Invalid move! Please try again");
                 displayBoard();
             } else {
@@ -73,26 +70,39 @@ public class GameMenu {
     private void displayBoard() {
         Piece[][] board = board = chessBoard.getBoard();
 
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < 9; i++) {
 
-                if (j == 0) {
-                    System.out.print("|");
-
-                }
-
-                String piece;
-                if (board[i][j] == null) {
-                    piece = " "; // unicode for empty character (with longer width)
-                } else {
-                    piece = board[i][j].toString();
-                }
-
-                System.out.print(piece);
-                System.out.print("|");
+            if (i != 8) {
+                System.out.print(8 - i + "  ");
             }
+            else {
+                System.out.print("   ");
+            }
+
+            for (int j = 0; j < 8; j++) {
+                if (i == 8) {
+                    char letter = (char)(97 + j);
+                    System.out.print(letter + " ");
+                } else {
+                    if (j == 0) {
+                        System.out.print("|");
+                    }
+
+                    String piece;
+                    if (board[i][j] == null) {
+                        piece = " "; // unicode for empty character (with longer width)
+                    } else {
+                        piece = board[i][j].toString();
+                    }
+
+                    System.out.print(piece);
+                    System.out.print("|");
+                }
+            }
+
             System.out.println();
         }
+
         System.out.println();
     }
 }

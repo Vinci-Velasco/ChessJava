@@ -1,7 +1,6 @@
 import board.ChessBoard;
 import misc.Coordinate;
 import org.junit.Test;
-import pieces.Piece;
 
 import static org.junit.Assert.*;
 
@@ -46,5 +45,10 @@ public class ChessBoardTest {
         assertFalse(chessBoard.updateBoard(new Coordinate(1, 3), new Coordinate(2, 3)));
         assertFalse(chessBoard.updateBoard(new Coordinate(0, 6), new Coordinate(2, 5)));
         assertTrue(chessBoard.updateBoard(new Coordinate(0, 3), new Coordinate(1, 4)));
+    }
+
+    @Test
+    public void checkmateTest() {
+
     }
 }
