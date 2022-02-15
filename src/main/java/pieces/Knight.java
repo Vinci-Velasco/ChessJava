@@ -50,6 +50,34 @@ public class Knight extends Piece{
             possibleMoves.add(newCoordinate4);
         }
 
+        newX = coordinates.x - 2;
+        newY = coordinates.y + 1;
+        Coordinate newCoordinate5 = new Coordinate(newY, newX);
+        if (validateMove(newY, newX, board)) {
+            possibleMoves.add(newCoordinate5);
+        }
+
+        newX = coordinates.x - 2;
+        newY = coordinates.y - 1;
+        Coordinate newCoordinate6 = new Coordinate(newY, newX);
+        if (validateMove(newY, newX, board)) {
+            possibleMoves.add(newCoordinate6);
+        }
+
+        newX = coordinates.x + 2;
+        newY = coordinates.y - 1;
+        Coordinate newCoordinate7 = new Coordinate(newY, newX);
+        if (validateMove(newY, newX, board)) {
+            possibleMoves.add(newCoordinate7);
+        }
+
+        newX = coordinates.x + 2;
+        newY = coordinates.y + 1;
+        Coordinate newCoordinate8 = new Coordinate(newY, newX);
+        if (validateMove(newY, newX, board)) {
+            possibleMoves.add(newCoordinate8);
+        }
+
         return possibleMoves;
     }
 

@@ -46,22 +46,30 @@ public class KnightTest {
         assertEquals(0, possibleMoves.size()); // no spots for the knight to move
 
 
-        // when all spaces are open (4 should be generated)
+        // when all spaces are open (8 should be generated)
         chessBoard.clearBoard();
         board = chessBoard.getBoard();
         board[3][4] = new Knight(new Coordinate(3, 4), true);
         chessBoard.setBoard(board);
         knight = board[3][4];
         possibleMoves = knight.generateMoves(chessBoard);
-        assertEquals(4, possibleMoves.size());
+        assertEquals(8, possibleMoves.size());
 
         coordinate1.setCoordinates(1, 3);
         coordinate2.setCoordinates(1, 5);
         Coordinate coordinate3 = new Coordinate(5, 5);
         Coordinate coordinate4 = new Coordinate(5, 3);
+        Coordinate coordinate5 = new Coordinate(4, 2);
+        Coordinate coordinate6 = new Coordinate(2, 2);
+        Coordinate coordinate7 = new Coordinate(2, 6);
+        Coordinate coordinate8 = new Coordinate(4, 6);
         assertTrue(possibleMoves.get(0).equals(coordinate1));
         assertTrue(possibleMoves.get(1).equals(coordinate2));
         assertTrue(possibleMoves.get(2).equals(coordinate3));
         assertTrue(possibleMoves.get(3).equals(coordinate4));
+        assertTrue(possibleMoves.get(4).equals(coordinate5));
+        assertTrue(possibleMoves.get(5).equals(coordinate6));
+        assertTrue(possibleMoves.get(6).equals(coordinate7));
+        assertTrue(possibleMoves.get(7).equals(coordinate8));
     }
 }
