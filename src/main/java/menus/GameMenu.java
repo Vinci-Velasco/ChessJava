@@ -12,17 +12,20 @@ public class GameMenu {
     ChessNotation chessNotation;
 
     public GameMenu() {
-        chessBoard = new ChessBoard();
         chessNotation = new ChessNotation();
     }
 
     public boolean startGame() {
+        chessBoard = new ChessBoard();
+        System.out.println("WELCOME TO CHESS");
+
         while (!chessBoard.checkmate()) {
             gameLoop();
         }
 
         // print victory/defeat screen
-
+        System.out.println("GAME OVER");
+        
         // return true to play again, false to quit
 
         return true;

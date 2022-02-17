@@ -178,8 +178,51 @@ public class ChessBoard {
         return false;
     }
 
+    /**
+     * Determines if the current player is in checkmate
+     * @return true if the current player is in checkmate, false otherwise
+     */
     public boolean checkmate() {
-        return false;
+        setFriendlyAndEnemyPieces();
+
+        for (Piece friendlyPiece: friendlyPieces) {
+            List<Coordinate> possibleMoves = friendlyPiece.generateMoves(this);
+
+            for (Coordinate moveTo: possibleMoves) {
+
+                // save copy of previous board state
+                Piece[][] previousBoardState = cloneCurrentBoard();
+                List<Piece> previousWhitePieces = new ArrayList<>(whitePieces);
+                List<Piece> previousBlackPieces = new ArrayList<>(blackPieces);
+
+
+                // preform the move
+                if (board[moveTo.y][moveTo.x] != null) {
+                    enemyPieces.remove(board[moveTo.y][moveTo.x]);
+                }
+
+                Coordinate moveFrom = friendlyPiece.getCoordinates();
+
+                board[moveTo.y][moveTo.x] = friendlyPiece;
+                board[moveFrom.y][moveFrom.x] = null;
+                friendlyPiece.setCoordinates(new Coordinate(moveTo.y, moveTo.x));
+
+                // see if the player is in check after said move and revert to previous
+                // board state
+                boolean inCheck = currentPlayerInCheck();
+                board = previousBoardState;
+                whitePieces = previousWhitePieces;
+                blackPieces = previousBlackPieces;
+                friendlyPiece.setCoordinates(new Coordinate(moveFrom.y, moveFrom.x));
+
+                // if a move is possible where the player is NOT check, then player is NOT in checkmate
+                if (!inCheck) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public Piece[][] getBoard() {
