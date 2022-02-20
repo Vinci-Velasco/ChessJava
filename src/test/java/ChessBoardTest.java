@@ -48,31 +48,31 @@ public class ChessBoardTest {
     }
 
     @Test
-    public void checkmateTest() {
+    public void noLegalMovesTest() {
         ChessBoard chessBoard = new ChessBoard();
 
         // normal board state (false)
         chessBoard.updateBoard(new Coordinate(6, 4), new Coordinate(4,4));
-        assertFalse(chessBoard.checkmate());
+        assertFalse(chessBoard.noLegalMoves());
 
         chessBoard.updateBoard(new Coordinate(1, 4), new Coordinate(3,4));
-        assertFalse(chessBoard.checkmate());
+        assertFalse(chessBoard.noLegalMoves());
 
         chessBoard.updateBoard(new Coordinate(7, 5), new Coordinate(4,2));
-        assertFalse(chessBoard.checkmate());
+        assertFalse(chessBoard.noLegalMoves());
 
         chessBoard.updateBoard(new Coordinate(0, 1), new Coordinate(2,2));
-        assertFalse(chessBoard.checkmate());
+        assertFalse(chessBoard.noLegalMoves());
 
         chessBoard.updateBoard(new Coordinate(7, 3), new Coordinate(3,7));
-        assertFalse(chessBoard.checkmate());
+        assertFalse(chessBoard.noLegalMoves());
 
         chessBoard.updateBoard(new Coordinate(0, 6), new Coordinate(2,5));
-        assertFalse(chessBoard.checkmate());
+        assertFalse(chessBoard.noLegalMoves());
 
         // in check and check cannot be removed (true)
         chessBoard.updateBoard(new Coordinate(3, 7), new Coordinate(1,5));
-        assertTrue(chessBoard.checkmate());
+        assertTrue(chessBoard.noLegalMoves());
 
         // when in check but possible moves to get rid of check (false)
         chessBoard = new ChessBoard();
@@ -81,7 +81,7 @@ public class ChessBoardTest {
         chessBoard.updateBoard(new Coordinate(7, 3), new Coordinate(3,7));
         chessBoard.updateBoard(new Coordinate(0, 1), new Coordinate(2,2));
         chessBoard.updateBoard(new Coordinate(3, 7), new Coordinate(1,5));
-        assertFalse(chessBoard.checkmate()); // king can take the queen
+        assertFalse(chessBoard.noLegalMoves()); // king can take the queen
 
     }
 }

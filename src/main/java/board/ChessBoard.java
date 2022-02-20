@@ -179,10 +179,10 @@ public class ChessBoard {
     }
 
     /**
-     * Determines if the current player is in checkmate
-     * @return true if the current player is in checkmate, false otherwise
+     * Determines if the current player has no legal moves
+     * @return true if the current player has no legal moves, false otherwise
      */
-    public boolean checkmate() {
+    public boolean noLegalMoves() {
         setFriendlyAndEnemyPieces();
 
         for (Piece friendlyPiece: friendlyPieces) {

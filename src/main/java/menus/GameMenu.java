@@ -19,16 +19,26 @@ public class GameMenu {
         chessBoard = new ChessBoard();
         System.out.println("WELCOME TO CHESS");
 
-        while (!chessBoard.checkmate()) {
+        while (!chessBoard.noLegalMoves()) {
             gameLoop();
         }
 
-        // print victory/defeat screen
-        System.out.println("GAME OVER");
-        
-        // return true to play again, false to quit
+        // checkmate
+        if (chessBoard.currentPlayerInCheck()) {
+            String player = chessBoard.getIsCurrentPlayerWhite() ? "Black":"White";
+            System.out.println("CHECKMATE! " + player + " wins!");
 
-        return true;
+        // draw
+        } else {
+            System.out.println("DRAW! No player wins!");
+        }
+        
+        // ask player to play again
+        System.out.println("Do you want to play again? (y/n)");
+        Scanner scanner = new Scanner(System.in);
+        String answer = scanner.next();
+
+        return answer.equals("y");
     }
 
     /**
@@ -73,6 +83,7 @@ public class GameMenu {
     private void displayBoard() {
         Piece[][] board = board = chessBoard.getBoard();
 
+        System.out.println();
         for (int i = 0; i < 9; i++) {
 
             if (i != 8) {
