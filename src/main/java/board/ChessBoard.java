@@ -64,17 +64,29 @@ public class ChessBoard {
         Piece[][] previousBoardState = cloneCurrentBoard();
         List<Piece> previousWhitePieces = new ArrayList<>(whitePieces);
         List<Piece> previousBlackPieces = new ArrayList<>(blackPieces);
+        Coordinate lastPosition = selectedPiece.getLastPosition();
 
+        setFriendlyAndEnemyPieces();
 
         // preform the move
-        setFriendlyAndEnemyPieces();
         if (board[moveTo.y][moveTo.x] != null) {
             enemyPieces.remove(board[moveTo.y][moveTo.x]);
+
+        } else if (selectedPiece instanceof Pawn) {
+
+            // move is en passant (pawn diagonal move where there is no enemy piece)
+            if (moveFrom.x != moveTo .x) {
+                enemyPieces.remove(board[moveFrom.y][moveTo.x]);
+                board[moveFrom.y][moveTo.x] = null;
+            }
         }
 
         board[moveTo.y][moveTo.x] = selectedPiece;
         board[moveFrom.y][moveFrom.x] = null;
         selectedPiece.setCoordinates(new Coordinate(moveTo.y, moveTo.x));
+        if (selectedPiece instanceof Pawn) {
+            selectedPiece.setLastPosition(moveFrom);
+        }
 
         // see if the player is in check after said move (which is invalid), revert to previous
         // board state
@@ -83,10 +95,12 @@ public class ChessBoard {
             whitePieces = previousWhitePieces;
             blackPieces = previousBlackPieces;
             selectedPiece.setCoordinates(new Coordinate(moveFrom.y, moveFrom.x));
+            selectedPiece.setLastPosition(lastPosition);
             return false;
         }
 
         isCurrentPlayerWhite = !isCurrentPlayerWhite;
+
         return true;
     }
 

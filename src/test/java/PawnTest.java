@@ -72,5 +72,22 @@ public class PawnTest {
         chessBoard.setBoard(board);
         possibleMoves = pawn.generateMoves(chessBoard);
         assertEquals(0, possibleMoves.size());
+
+        // en passant should be valid here (2 moves)
+        chessBoard = new ChessBoard();
+        chessBoard.updateBoard(new Coordinate(6, 4), new Coordinate(4,4));
+        chessBoard.updateBoard(new Coordinate(1, 0), new Coordinate(2,0));
+        chessBoard.updateBoard(new Coordinate(4, 4), new Coordinate(3,4));
+        chessBoard.updateBoard(new Coordinate(1, 3), new Coordinate(3,3));
+
+        board = chessBoard.getBoard();
+        pawn = board[3][4];
+        possibleMoves = pawn.generateMoves(chessBoard);
+
+        coordinate4 = new Coordinate(2,3);
+        Coordinate coordinate5 = new Coordinate(2,4);
+        assertTrue(possibleMoves.get(0).equals(coordinate4));
+        assertTrue(possibleMoves.get(1).equals(coordinate5));
+
     }
 }

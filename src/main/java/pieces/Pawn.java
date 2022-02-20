@@ -101,6 +101,26 @@ public class Pawn extends Piece{
         // diagonal squares
         } else {
             if (squareIsOpen) {
+
+                // Pawn is NOT on the edges of the board
+//                if ((coordinates.x > board.LEFT_BOUNDARY && coordinates.x < board.RIGHT_BOUNDARY)
+//                     && (coordinates.y < board.DOWN_BOUNDARY && coordinates.y > board.UP_BOUNDARY)) {
+//
+//                }
+                Piece internalBoard[][] = board.getBoard();
+                Piece potentialPawn = internalBoard[coordinates.y][newX];
+
+                // en passant
+                if (potentialPawn != null) {
+                    if (potentialPawn instanceof Pawn && potentialPawn.getIsWhite() != isWhite) {
+
+                        int distance = Math.abs(potentialPawn.getLastPosition().y - potentialPawn.getCoordinates().y);
+                        if (distance == 2) {
+                            return true;
+                        }
+                    }
+                }
+
                 return false;
 
             } else {
