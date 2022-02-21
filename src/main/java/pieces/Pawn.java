@@ -102,12 +102,7 @@ public class Pawn extends Piece{
         } else {
             if (squareIsOpen) {
 
-                // Pawn is NOT on the edges of the board
-//                if ((coordinates.x > board.LEFT_BOUNDARY && coordinates.x < board.RIGHT_BOUNDARY)
-//                     && (coordinates.y < board.DOWN_BOUNDARY && coordinates.y > board.UP_BOUNDARY)) {
-//
-//                }
-                Piece internalBoard[][] = board.getBoard();
+           Piece internalBoard[][] = board.getBoard();
                 Piece potentialPawn = internalBoard[coordinates.y][newX];
 
                 // en passant

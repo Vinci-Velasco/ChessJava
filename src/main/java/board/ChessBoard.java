@@ -4,6 +4,7 @@ import misc.Coordinate;
 import pieces.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,87 +22,24 @@ public class ChessBoard {
     private List<Piece> blackPieces;
     private List<Piece> enemyPieces;
     private List<Piece> friendlyPieces;
+    private Piece[][] previousBoardState;
+    private List<Piece> previousWhitePieces;
+    private List<Piece> previousBlackPieces;
 
     private boolean isCurrentPlayerWhite;
+    private Coordinate lastPosition;
+
 
     public ChessBoard() {
         setInitialBoard();
     }
 
-    /**
-     * Updates the board state by moving a piece. Returns true if move is valid, false otherwise
-     * @param moveFrom Coordinate of the piece that is going to be moved
-     * @param moveTo New coordinate piece is being moved to
-     * @return true if move is valid and board updated, false otherwise
-     */
-    public boolean updateBoard(Coordinate moveFrom, Coordinate moveTo) {
-        // tyring to move a piece not on the board
-        boolean verticalOutOfBounds = moveFrom.y < UP_BOUNDARY || moveFrom.y > DOWN_BOUNDARY;
-        boolean horizontalOutOfBounds = moveFrom.x < LEFT_BOUNDARY || moveFrom.x > RIGHT_BOUNDARY;
+    public Piece[][] getBoard() {
+        return board;
+    }
 
-        if (verticalOutOfBounds || horizontalOutOfBounds) {
-            return false;
-        }
-
-        // trying to move an empty piece
-        if (board[moveFrom.y][moveFrom.x] == null) {
-            return false;
-        }
-
-        // trying to move enemy piece
-        Piece selectedPiece = board[moveFrom.y][moveFrom.x];
-        if (isCurrentPlayerWhite != selectedPiece.getIsWhite()) {
-            return  false;
-        }
-
-        // not a valid move
-        List<Coordinate> possibleMoves = selectedPiece.generateMoves(this);
-        if (possibleMoves.isEmpty() || !possibleMoves.contains(moveTo))  {
-            return false;
-        }
-
-        // save copy of previous board state
-        Piece[][] previousBoardState = cloneCurrentBoard();
-        List<Piece> previousWhitePieces = new ArrayList<>(whitePieces);
-        List<Piece> previousBlackPieces = new ArrayList<>(blackPieces);
-        Coordinate lastPosition = selectedPiece.getLastPosition();
-
-        setFriendlyAndEnemyPieces();
-
-        // preform the move
-        if (board[moveTo.y][moveTo.x] != null) {
-            enemyPieces.remove(board[moveTo.y][moveTo.x]);
-
-        } else if (selectedPiece instanceof Pawn) {
-
-            // move is en passant (pawn diagonal move where there is no enemy piece)
-            if (moveFrom.x != moveTo .x) {
-                enemyPieces.remove(board[moveFrom.y][moveTo.x]);
-                board[moveFrom.y][moveTo.x] = null;
-            }
-        }
-
-        board[moveTo.y][moveTo.x] = selectedPiece;
-        board[moveFrom.y][moveFrom.x] = null;
-        selectedPiece.setCoordinates(new Coordinate(moveTo.y, moveTo.x));
-        if (selectedPiece instanceof Pawn) {
-            selectedPiece.setLastPosition(moveFrom);
-        }
-
-        // see if the player is in check after said move (which is invalid), revert to previous
-        // board state
-        if (currentPlayerInCheck()) {
-            board = previousBoardState;
-            whitePieces = previousWhitePieces;
-            blackPieces = previousBlackPieces;
-            selectedPiece.setCoordinates(new Coordinate(moveFrom.y, moveFrom.x));
-            selectedPiece.setLastPosition(lastPosition);
-            return false;
-        }
-
-        isCurrentPlayerWhite = !isCurrentPlayerWhite;
-
-        return true;
+    public boolean getIsCurrentPlayerWhite() {
+        return isCurrentPlayerWhite;
     }
 
     /**
@@ -123,9 +61,7 @@ public class ChessBoard {
         board[0][6] = new Knight(new Coordinate(0, 6), false);
         board[0][7] = new Rook(new Coordinate(0, 7), false);
 
-        for (int i = 0; i < 8; i++) {
-            blackPieces.add(board[0][i]);
-        }
+        blackPieces.addAll(Arrays.asList(board[0]).subList(0, 8));
 
         for (int i = 0; i < 8; i++) {
             board[1][i] = new Pawn(new Coordinate(1, i), false);
@@ -150,14 +86,62 @@ public class ChessBoard {
         board[7][6] = new Knight(new Coordinate(7, 6), true);
         board[7][7] = new Rook(new Coordinate(7, 7), true);
 
-        for (int i = 0; i < 8; i++) {
-            whitePieces.add(board[7][i]);
-        }
+        whitePieces.addAll(Arrays.asList(board[7]).subList(0, 8));
 
         for (int i = 0; i < 8; i++) {
             board[6][i] = new Pawn(new Coordinate(6, i), true);
             whitePieces.add(board[6][i]);
         }
+    }
+
+    /**
+     * Updates the board state by moving a piece. Returns true if move is valid, false otherwise
+     * @param moveFrom Coordinate of the piece that is going to be moved
+     * @param moveTo New coordinate piece is being moved to
+     * @return true if move is valid and board updated, false otherwise
+     */
+    public boolean updateBoard(Coordinate moveFrom, Coordinate moveTo) {
+
+        if (notValidMove(moveFrom, moveTo)) {
+            return false;
+        }
+
+        // save copy of previous board state
+        Piece selectedPiece = board[moveFrom.y][moveFrom.x];
+        saveBoardState(selectedPiece);
+
+        setFriendlyAndEnemyPieces();
+
+        // remove enemy piece on moveTo if it exists
+        if (board[moveTo.y][moveTo.x] != null) {
+            enemyPieces.remove(board[moveTo.y][moveTo.x]);
+
+        } else if (selectedPiece instanceof Pawn) {
+
+            // move is en passant (pawn diagonal move where there is no enemy piece)
+            if (moveFrom.x != moveTo .x) {
+                enemyPieces.remove(board[moveFrom.y][moveTo.x]);
+                board[moveFrom.y][moveTo.x] = null;
+            }
+        }
+
+        // move the moving piece
+        board[moveTo.y][moveTo.x] = selectedPiece;
+        board[moveFrom.y][moveFrom.x] = null;
+        selectedPiece.setCoordinates(new Coordinate(moveTo.y, moveTo.x));
+        if (selectedPiece instanceof Pawn) {
+            selectedPiece.setLastPosition(moveFrom);
+        }
+
+        // see if the player is in check after said move (which is invalid), revert to previous
+        // board state if true
+        if (currentPlayerInCheck()) {
+            revertToPreviousBoardState(selectedPiece, moveFrom, moveTo);
+            return false;
+        }
+
+        isCurrentPlayerWhite = !isCurrentPlayerWhite;
+        return true;
     }
 
     /**
@@ -239,40 +223,60 @@ public class ChessBoard {
         return true;
     }
 
-    public Piece[][] getBoard() {
-        return board;
+    // helper method that determines if the move by the player is not valid (NOT including check logic)
+    private boolean notValidMove(Coordinate moveFrom, Coordinate moveTo) {
+        // tyring to move a piece not on the board
+        boolean verticalOutOfBounds = moveFrom.y < UP_BOUNDARY || moveFrom.y > DOWN_BOUNDARY;
+        boolean horizontalOutOfBounds = moveFrom.x < LEFT_BOUNDARY || moveFrom.x > RIGHT_BOUNDARY;
+
+        if (verticalOutOfBounds || horizontalOutOfBounds) {
+            return true;
+        }
+
+        // trying to move an empty piece
+        if (board[moveFrom.y][moveFrom.x] == null) {
+            return true;
+        }
+
+        Piece selectedPiece = board[moveFrom.y][moveFrom.x];
+
+        // trying to move enemy piece
+        if (isCurrentPlayerWhite != selectedPiece.getIsWhite()) {
+            return  true;
+        }
+
+        // not a valid move for that piece
+        List<Coordinate> possibleMoves = selectedPiece.generateMoves(this);
+        return possibleMoves.isEmpty() || !possibleMoves.contains(moveTo);
     }
 
-    public boolean getIsCurrentPlayerWhite() {
-        return isCurrentPlayerWhite;
+    private void saveBoardState(Piece selectedPiece) {
+        previousBoardState = cloneCurrentBoard();
+        previousWhitePieces = new ArrayList<>(whitePieces);
+        previousBlackPieces = new ArrayList<>(blackPieces);
+        lastPosition = selectedPiece.getLastPosition();
     }
 
-    // ONLY USE FOR TESTS
-    public void setBoard(Piece[][] board) {
-        this.board = board;
+    private void revertToPreviousBoardState(Piece selectedPiece, Coordinate moveFrom, Coordinate moveTo) {
+        board = previousBoardState;
+        whitePieces = previousWhitePieces;
+        blackPieces = previousBlackPieces;
+        selectedPiece.setCoordinates(new Coordinate(moveFrom.y, moveFrom.x));
+        selectedPiece.setLastPosition(lastPosition);
     }
 
-    // ONLY USE FOR TESTS
-    public void clearBoard() {
-         for (int i = 0; i <= DOWN_BOUNDARY; i++) {
-             for (int j = 0; j <= RIGHT_BOUNDARY; j++) {
-                 board[i][j] = null;
-             }
-         }
-    }
-
+    // helper function that clones the board
     private Piece[][] cloneCurrentBoard() {
         Piece[][] copiedBoard = new Piece[8][8];
 
         for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                copiedBoard[i][j] = board[i][j];
-            }
+            System.arraycopy(board[i], 0, copiedBoard[i], 0, 8);
         }
 
         return copiedBoard;
     }
 
+    // helper method that sets friendly and enemy pieces depending on current player
     private void setFriendlyAndEnemyPieces() {
         if (isCurrentPlayerWhite) {
             enemyPieces = blackPieces;
@@ -282,6 +286,20 @@ public class ChessBoard {
             enemyPieces = whitePieces;
             friendlyPieces = blackPieces;
         }
+    }
 
+
+    // ONLY USE FOR TESTS
+    public void setBoard(Piece[][] board) {
+        this.board = board;
+    }
+
+    // ONLY USE FOR TESTS
+    public void clearBoard() {
+        for (int i = 0; i <= DOWN_BOUNDARY; i++) {
+            for (int j = 0; j <= RIGHT_BOUNDARY; j++) {
+                board[i][j] = null;
+            }
+        }
     }
 }
