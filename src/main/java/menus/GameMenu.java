@@ -48,7 +48,7 @@ public class GameMenu {
         displayBoard();
 
         Scanner scanner = new Scanner(System.in);
-        String player = "";
+        String player;
 
         // get input from the user to move piece
         boolean invalidMove = true;
@@ -81,7 +81,7 @@ public class GameMenu {
      * Displays the current board state
      */
     private void displayBoard() {
-        Piece[][] board = board = chessBoard.getBoard();
+        Piece[][] board = chessBoard.getBoard();
 
         System.out.println();
         for (int i = 0; i < 9; i++) {

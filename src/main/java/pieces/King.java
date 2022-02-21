@@ -24,7 +24,7 @@ public class King extends Piece{
     @Override
     public List<Coordinate> generateMoves(ChessBoard board) {
         List<Coordinate> possibleMoves = new ArrayList<>();
-        int newY = coordinates.y - 1;;
+        int newY = coordinates.y - 1;
         int newX;
 
         // top row squares
@@ -47,7 +47,7 @@ public class King extends Piece{
         }
 
         // bottom row squares
-        newY = coordinates.y + 1;;
+        newY = coordinates.y + 1;
 
         // top row squares
         for (int i = 1; i >= -1; i--) {

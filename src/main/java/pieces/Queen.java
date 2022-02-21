@@ -181,8 +181,7 @@ public class Queen extends Piece{
 
         } else {
             Piece piece = board.getBoard()[newY][newX];
-            boolean isEnemyPiece = piece.getIsWhite() != isWhite;
-            return isEnemyPiece;
+            return piece.getIsWhite() != isWhite;
         }
     }
 

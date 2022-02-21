@@ -102,7 +102,7 @@ public class Pawn extends Piece{
         } else {
             if (squareIsOpen) {
 
-           Piece internalBoard[][] = board.getBoard();
+           Piece[][] internalBoard = board.getBoard();
                 Piece potentialPawn = internalBoard[coordinates.y][newX];
 
                 // en passant
@@ -110,9 +110,7 @@ public class Pawn extends Piece{
                     if (potentialPawn instanceof Pawn && potentialPawn.getIsWhite() != isWhite) {
 
                         int distance = Math.abs(potentialPawn.getLastPosition().y - potentialPawn.getCoordinates().y);
-                        if (distance == 2) {
-                            return true;
-                        }
+                        return distance == 2;
                     }
                 }
 
@@ -120,8 +118,7 @@ public class Pawn extends Piece{
 
             } else {
                 Piece piece = board.getBoard()[newY][newX];
-                boolean isEnemyPiece = piece.getIsWhite() != isWhite;
-                return isEnemyPiece;
+                return piece.getIsWhite() != isWhite;
             }
         }
     }

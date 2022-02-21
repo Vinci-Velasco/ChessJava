@@ -136,7 +136,7 @@ public class ChessBoard {
         // see if the player is in check after said move (which is invalid), revert to previous
         // board state if true
         if (currentPlayerInCheck()) {
-            revertToPreviousBoardState(selectedPiece, moveFrom, moveTo);
+            revertToPreviousBoardState(selectedPiece, moveFrom);
             return false;
         }
 
@@ -257,7 +257,7 @@ public class ChessBoard {
         lastPosition = selectedPiece.getLastPosition();
     }
 
-    private void revertToPreviousBoardState(Piece selectedPiece, Coordinate moveFrom, Coordinate moveTo) {
+    private void revertToPreviousBoardState(Piece selectedPiece, Coordinate moveFrom) {
         board = previousBoardState;
         whitePieces = previousWhitePieces;
         blackPieces = previousBlackPieces;
