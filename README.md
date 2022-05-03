@@ -9,6 +9,7 @@ This is a personal project of mine to apply newly learnt skills of OOP.
 - Utilizes OOP principles learnt over the previous semester
 
 **Extending the Project**
+- Implement ability to castle
 - Use a GUI instead of on the command line
 - Show turn history in chess notation, and display the pieces that have been
   previously captured.
